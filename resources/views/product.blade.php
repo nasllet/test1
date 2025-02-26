@@ -5,6 +5,19 @@
     <div class="container d-flex justify-content-center align-items-start" style="min-height: 100vh;">
         <div class="row g-1 justify-content-center">
             <h1 class="text-start mb-4 fs-3 ps-3" style="font-size: 1.8rem;">商品一覧画面</h1> 
+            <form  action="{{ route('productlist') }}" method="GET">
+    <input class="border border-dark rounded" type="text" name="keyword" value="{{ request('keyword') }}" placeholder="商品名・メーカー名を検索">
+    <select  class="border border-dark rounded" name="company_id">
+        <option value="">すべてのメーカー</option>
+        @foreach($companies as $company)
+            <option value="{{ $company->id }}" {{ old('company_id') == $company->id ? 'selected' : '' }}>
+                {{ $company->company_name }}
+            </option>
+        @endforeach
+    </select>
+    <input class="btn btn-success btn-sm" type="submit" value="検索">
+</form>
+
             <div class="col-md-12 border border-dark p-4 rounded bg-white">
                 <table class="table table-bordered table-striped table-hover text-center text-nowrap" style="font-size: 1.2rem;">
                     <thead>
@@ -34,7 +47,7 @@
                             <td>{{ $product->product_name }}</td>
                             <td>¥{{ number_format($product->price) }}</td>
                             <td>{{ $product->stock }}</td>
-                            <td>{{ $product->company_name }}</td>
+                            <td>{{ $product->company->company_name }}</td>
                             <td>
                                 <a href="{{ route('productdetail', ['id' => $product->id]) }}" class="btn btn-info btn-sm">詳細</a>
                                 <form action="{{ route('productdestroy', $product->id) }}" method="POST" class="d-inline" onsubmit="return confirm('本当に削除しますか？');">

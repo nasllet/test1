@@ -37,7 +37,7 @@ class Product extends Model
 
     public function company()
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(Company::class,'company_id');
     }
 //更新処理
     public function updateProduct($request)
