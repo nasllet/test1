@@ -123,7 +123,6 @@ class ProductController extends Controller
             'stock.required' => '在庫数を入力してください。',
             'stock.integer' => '在庫数は整数で入力してください。',
         ]);
-        dd(session()->get('errors'));
 
         $product = Product::find($id);
 
