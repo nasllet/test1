@@ -6,16 +6,6 @@
             <div class="row justify-content-center">
                 <h1 class="text-start mb-4 fs-3 ms-4" style="font-size: 1.8rem;">商品情報編集画面</h1>
                 <div class="col-md-8 border border-dark p-4 rounded bg-white">
-            
-                    @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
                     
                     <form action="{{ route('productupdate', ['id' => $product->id]) }}" method="POST" enctype="multipart/form-data">
                         @csrf

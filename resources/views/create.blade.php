@@ -6,15 +6,6 @@
         <div class="col-md-6 mx-auto"> 
             <h1 class="ms-4 mb-4 fs-3" style="font-size: 1.8rem;">新規登録画面</h1> 
             <div class="border border-dark bg-white p-4 rounded">
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
 
                 <form action="{{ route('productstore') }}" method="POST" enctype="multipart/form-data">
                     @csrf

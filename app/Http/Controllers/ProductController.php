@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\ProductRequest; 
 use App\Models\Product;
 use App\Models\Company;
 use Illuminate\Support\Facades\DB;
@@ -42,33 +43,15 @@ class ProductController extends Controller
         $companies = $company->getCompany();
         return view('create', compact('companies'));
     }
-
-    // 登録処理
-    public function store(Request $request)
-{
-    // バリデーション
-    $validated = $request->validate([
-        'product_name' => 'required',
-        'company_id' => 'required',
-        'price' => 'required|numeric',
-        'stock' => 'required|integer',
-        'comment' => 'nullable',
-    ], [
-        'product_name.required' => '商品名を入力してください。',
-        'company_id.required' => 'メーカー名を選択してください。',
-        'price.required' => '価格を入力してください。',
-        'price.numeric' => '価格は数値で入力してください。',
-        'stock.required' => '在庫数を入力してください。',
-        'stock.integer' => '在庫数は整数で入力してください。',
-    ]);
-
-
+    // 商品情報登録処理
+    public function store(ProductRequest $request)
+    {
         // トランザクション開始
         DB::beginTransaction();
 
         try {
-            $product = new Product();
-            $product->storeProduct($request);
+            $validatedData = $request->validated(); // バリデーション済みデータ取得
+            Product::create($validatedData); // 商品データ登録
 
             // トランザクションのコミット
             DB::commit();
@@ -107,45 +90,31 @@ class ProductController extends Controller
     }
 
     // 商品情報編集の更新処理
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'product_name' => 'required',
-            'company_id' => 'required',
-            'price' => 'required|numeric',
-            'stock' => 'required|integer',
-            'comment' => 'nullable',
-        ], [
-            'product_name.required' => '商品名を入力してください。',
-            'company_id.required' => 'メーカー名を選択してください。',
-            'price.required' => '価格を入力してください。',
-            'price.numeric' => '価格は数値で入力してください。',
-            'stock.required' => '在庫数を入力してください。',
-            'stock.integer' => '在庫数は整数で入力してください。',
-        ]);
-
-        $product = Product::find($id);
-
-        if (!$product) {
-            return redirect()->route('productlist');
-        }
-
-        // トランザクション開始
-        DB::beginTransaction();
-
-        try {
-            $product->updateProduct($request);
-
-            // トランザクションのコミット
-            DB::commit();
-
-            return redirect()->route('productlist')->with('success', '商品が更新されました');
-        } catch (\Exception $e) {
-            // エラー発生時はロールバック
-            DB::rollBack();
-            return redirect()->route('productlist')->with('error', '商品更新中にエラーが発生しました');
-        }
-    }
+     public function update(ProductRequest $request, $id)
+     {
+         $product = Product::find($id);
+ 
+         if (!$product) {
+             return redirect()->route('productlist')->with('error', '商品が見つかりません');
+         }
+ 
+         // トランザクション開始
+         DB::beginTransaction();
+ 
+         try {
+             $validatedData = $request->validated(); // バリデーション済みデータ取得
+             $product->update($validatedData); // 商品情報を更新
+ 
+             // トランザクションのコミット
+             DB::commit();
+ 
+             return redirect()->route('productlist')->with('success', '商品が更新されました');
+         } catch (\Exception $e) {
+             // エラー発生時はロールバック
+             DB::rollBack();
+             return redirect()->route('productlist')->with('error', '商品更新中にエラーが発生しました');
+         }
+     }
 
     // 商品削除処理
     public function destroy($id)
