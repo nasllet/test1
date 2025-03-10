@@ -45,24 +45,32 @@ class ProductController extends Controller
     }
     // 商品情報登録処理
     public function store(ProductRequest $request)
-    {
-        // トランザクション開始
-        DB::beginTransaction();
+{
+    DB::beginTransaction();
 
-        try {
-            $validatedData = $request->validated(); // バリデーション済みデータ取得
-            Product::create($validatedData); // 商品データ登録
+    try {
+        // バリデーションを通過したデータを取得
+        $validatedData = $request->validated(); 
 
-            // トランザクションのコミット
-            DB::commit();
-
-            return redirect()->route('productlist')->with('success', '商品が登録されました');
-        } catch (\Exception $e) {
-            // エラー発生時はロールバック
-            DB::rollBack();
-            return redirect()->route('productlist')->with('error', '商品登録中にエラーが発生しました');
+        // 画像がアップロードされているかチェック
+        if ($request->hasFile('img_path')) {
+            // 画像をstorageディレクトリに保存
+            $path = $request->file('img_path')->store('public/images');
+            $validatedData['img_path'] = $path; // 画像パスを配列に追加
         }
+
+        // 商品データ登録
+        Product::create($validatedData); 
+
+        // トランザクションのコミット
+        DB::commit();
+
+        return redirect()->route('productlist')->with('success', '商品が登録されました');
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return redirect()->route('productlist')->with('error', '商品登録中にエラーが発生しました');
     }
+}
 
     // 詳細画面の表示＆エラー表示
     public function detail($id)
@@ -90,31 +98,39 @@ class ProductController extends Controller
     }
 
     // 商品情報編集の更新処理
-     public function update(ProductRequest $request, $id)
-     {
-         $product = Product::find($id);
- 
-         if (!$product) {
-             return redirect()->route('productlist')->with('error', '商品が見つかりません');
-         }
- 
-         // トランザクション開始
-         DB::beginTransaction();
- 
-         try {
-             $validatedData = $request->validated(); // バリデーション済みデータ取得
-             $product->update($validatedData); // 商品情報を更新
- 
-             // トランザクションのコミット
-             DB::commit();
- 
-             return redirect()->route('productlist')->with('success', '商品が更新されました');
-         } catch (\Exception $e) {
-             // エラー発生時はロールバック
-             DB::rollBack();
-             return redirect()->route('productlist')->with('error', '商品更新中にエラーが発生しました');
-         }
-     }
+    public function update(ProductRequest $request, $id)
+    {
+        $product = Product::find($id);
+    
+        if (!$product) {
+            return redirect()->route('productlist')->with('error', '商品が見つかりません');
+        }
+    
+        DB::beginTransaction();
+    
+        try {
+            // バリデーションを通過したデータを取得
+            $validatedData = $request->validated(); 
+    
+            // 画像がアップロードされているかチェック
+            if ($request->hasFile('img_path')) {
+                // 画像をstorageディレクトリに保存
+                $path = $request->file('img_path')->store('public/images');
+                $validatedData['img_path'] = $path; // 画像パスを配列に追加
+            }
+    
+            // 商品情報を更新
+            $product->update($validatedData); 
+    
+            // トランザクションのコミット
+            DB::commit();
+    
+            return redirect()->route('productlist')->with('success', '商品が更新されました');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('productlist')->with('error', '商品更新中にエラーが発生しました');
+        }
+    }
 
     // 商品削除処理
     public function destroy($id)
@@ -145,8 +161,3 @@ class ProductController extends Controller
         }
     }
 }
-
-
-
-
-

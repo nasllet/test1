@@ -5,20 +5,25 @@ table {
 }
 th, td {
     padding: 20px;
-    border: 1px solid #00000000; /* 明示的にボーダーを適用 */
+    border: 1px solid #000000; /* 明示的にボーダーを適用 */
 }
 
 td:nth-child(2) { /* 商品画像のセル */
-    width: 50px; /* 画像の表示領域を確保 */
+    width: 100px; /* 画像の表示領域を確保 */
     text-align: center;
 }
 .product-image {
-    max-width: 100%; /* 親要素の幅に合わせる */
+    max-width: 100px; /* 親要素に合わせて最大幅を指定 */
     height: auto; /* 縦横比を維持 */
     object-fit: cover;
 }
+
 td img {
-    max-width: 100px; /* 画像の最大幅を150pxに */
+    max-width: 100%; /* 画像の幅を100%に合わせる */
     height: auto; /* 縦横比を維持 */
     display: block; /* 余計な隙間を防ぐ */
 }
+
+#searchForm {
+    display: block !important;
+    }

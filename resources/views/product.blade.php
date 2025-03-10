@@ -39,7 +39,7 @@
                             <td>{{ $product->id }}</td>
                             <td>
                                 @if ($product->img_path)
-                                    <img src="{{ asset('storage/' . $product->img_path) }}" alt="商品画像" class="img-fluid rounded float-start" style="max-width: 100px;">
+                                <img src="{{ asset('storage/images/' . basename($product->img_path)) }}" alt="商品画像" class="img-fluid rounded" style="max-width: 100px;">
                                 @else
                                     画像なし
                                 @endif
@@ -60,10 +60,9 @@
                         @endforeach
                     </tbody>
                 </table>
-
                 <!-- ページネーション -->
                 <div class="d-flex justify-content-center mt-3">
-                    {{ $products->links() }}
+                {{ $products->links('pagination::bootstrap-4') }}
                 </div>
             </div>
         </div>

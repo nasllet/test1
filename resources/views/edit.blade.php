@@ -68,6 +68,7 @@
 
                         <div class="d-flex align-items-center mb-3 gap-3">
                             <label for="img_path" class="col-sm-4 text-start pe-3 fw-bold fs-5 font-size: 1.2rem;">画像</label>
+                            <img src="{{ asset('storage/images/' . basename($product->img_path)) }}" alt="商品画像" class="img-fluid rounded" style="max-width: 100px;">
                             <input type="file" class="form-control @error('img_path') is-invalid @enderror" id="img_path" name="img_path">
                             @error('img_path')
                                 <div class="text-danger">{{ $message }}</div>

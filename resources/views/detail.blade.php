@@ -15,7 +15,7 @@
                 <div class="d-flex align-items-center mb-3 gap-3">
                     <label class="col-sm-4 text-nowrap fw-bold fs-5">商品画像</label>
                     <div class="col-sm-9  ps-5">
-                        <img src="{{ asset('storage/' . $product->img_path) }}" class="img-fluid rounded d-block float-start" style="max-width: 140px;">
+                    <img src="{{ asset('storage/images/' . basename($product->img_path)) }}" alt="商品画像" class="img-fluid rounded" style="max-width: 140px;">
                     </div>
                 </div>
 

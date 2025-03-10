@@ -71,4 +71,3 @@ public function storeProduct($request)
     $this->save();  
 }
 }
-
