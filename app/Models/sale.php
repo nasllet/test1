@@ -2,21 +2,21 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 
-
-class sale extends Model
+class Sale extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
-        'id',
         'product_id',
+        'quantity',
+        'total_price',
     ];
-public function getSale()
-{
-    return DB::table('sales')
-            ->join('products', 'sales.product_id', '=', 'products.id')
-            ->select('sales.id', 'sales.product_name') 
-            ->get();
-}
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

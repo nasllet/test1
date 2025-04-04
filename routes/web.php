@@ -36,10 +36,11 @@ Route::get('/productdetail/{id}', [App\Http\Controllers\ProductController::class
 Route::get('/productedit/{id}', [App\Http\Controllers\ProductController::class, 'edit'])->name('productedit');
 //商品編集更新処理
 Route::put('/productupdate/{id}', [App\Http\Controllers\ProductController::class, 'update'])->name('productupdate');
-//削除機能
-Route::delete('/products/{id}', [App\Http\Controllers\ProductController::class, 'destroy'])->name('productdestroy');
+//Ajax削除機能
+Route::delete('/productdestroy/{id}', [App\Http\Controllers\ProductController::class, 'destroy'])->name('productdestroy');
 
 //Ajax検索機能
 Route::get('/productsearch', [App\Http\Controllers\ProductController::class, 'productsearch'])->name('productsearch');
+
 
 });

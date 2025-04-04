@@ -70,4 +70,12 @@ public function storeProduct($request)
 
     $this->save();  
 }
+
+    // 1つの商品は0回以上販売される
+    public function sales()
+    {
+        return $this->hasMany(Sale::class);
+    }
+
+
 }
